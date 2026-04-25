@@ -370,7 +370,7 @@ function showCardById(id) {
         <div class="grid-item"><b style="color:var(--gold)">수비학</b><br>${data.academic?.sub || '준비 중'}</div>
         <div class="grid-item"><b style="color:var(--gold)">점성학</b><br>${data.academic?.star || '준비 중'}</div>
       </div>
-      <div class="hist-box"><b style="color:var(--gold)">신화적 배경</b><br>${data.academic?.myth || '준비 중'}</div>
+      <div class="hist-box"><b style="color:var(--gold)">신화적 배경</b><br>${(typeof mythDetails !== 'undefined' && mythDetails[String(id)]) ? mythDetails[String(id)] : (data.academic?.myth || '준비 중')}</div>
       <div class="hist-box"><b style="color:var(--gold)">역사적 배경</b><br>${data.academic?.hist || '준비 중'}</div>
     </div>
 
