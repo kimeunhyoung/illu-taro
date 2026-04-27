@@ -382,7 +382,7 @@ function renderDeckFilters() {
     const c = document.createElement('span');
     c.className = 'chip' + (activeDeck === k ? ' on' : '');
     c.textContent = v;
-    c.onclick = () => { activeDeck = k; renderSuitFilters(); renderMenu(); };
+    c.onclick = () => { activeDeck = k; renderAll(); };
     el.appendChild(c);
   });
 }
@@ -448,16 +448,13 @@ function showCardById(id) {
   const pageSize = isMobile ? 12 : 16;
   const idxInFiltered = ids.indexOf(id);
   if (idxInFiltered >= 0) {
-    const targetPage = Math.floor(idxInFiltered / pageSize);
-    if (targetPage !== menuPage) {
-      menuPage = targetPage;
-      renderMenu();
-    }
+    menuPage = Math.floor(idxInFiltered / pageSize);
   }
+  renderMenu();
 
   // 메뉴 active 업데이트
   document.querySelectorAll('.menu-item').forEach(el => {
-    el.classList.toggle('active', parseInt(el.getAttribute('data-id')) === id);
+    el.classList.toggle('active', parseInt(el.getAttribute('data-id'), 10) === id);
   });
 
   const data = cardsData[String(id)];
@@ -709,7 +706,6 @@ document.getElementById('stopBtn').onclick = stopReading;
 // ── 초기화 ────────────────────────────────────────
 renderAll();
 updateCardStickyOffset();
-showCardById(0);
 </script>
 </body>
 </html>
