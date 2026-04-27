@@ -660,14 +660,42 @@ let utterance = null;
 function getReadText() {
   const data = cardsData[String(currentId)];
   if (!data) return '';
+  const id = String(currentId);
   let text = data.name + '. ';
-  data.scenes.forEach(s => {
-    text += s.p + '. ';
-  });
-  text += '긍정적 의미: ';
-  data.positive.forEach(p => text += p.t + '. ' + p.d + '. ');
-  text += '부정적 의미: ';
-  data.negative.forEach(n => text += n.t + '. ' + n.d + '. ');
+
+  if (data.keywords && data.keywords.length) {
+    text += '카드 키워드. ' + data.keywords.join(', ') + '. ';
+  }
+
+  if (data.scenes && data.scenes.length) {
+    text += '심화 장면 해설. ';
+    data.scenes.forEach(s => {
+      if (s.t) text += s.t + ' ';
+      if (s.p) text += s.p + ' ';
+      if (s.q) text += s.q + ' ';
+    });
+  }
+
+  const ac = data.academic;
+  if (ac) {
+    text += '학문적 배경. ';
+    if (ac.sub) text += '수비학. ' + ac.sub + ' ';
+    if (ac.star) text += '점성학. ' + ac.star + ' ';
+    const myth = (typeof mythDetails !== 'undefined' && mythDetails[id]) ? mythDetails[id] : (ac.myth || '');
+    if (myth) text += '신화적 배경. ' + myth + ' ';
+    if (ac.hist) text += '역사적 배경. ' + ac.hist + ' ';
+  }
+
+  text += '긍정적 의미. ';
+  (data.positive || []).forEach(p => { text += p.t + ' ' + p.d + ' '; });
+  text += '부정적 의미. ';
+  (data.negative || []).forEach(n => { text += n.t + ' ' + n.d + ' '; });
+
+  if (data.practical && data.practical.length) {
+    text += '실전 리딩 적용. ';
+    data.practical.forEach(line => { text += line + ' '; });
+  }
+
   return text;
 }
 
